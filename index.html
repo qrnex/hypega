@@ -3,35 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>hypega | Maintenance</title>
-    <style>
-        /* Temel Ayarlar */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+    
+    <title>hypega | Future of Music & Tech</title>
+    <meta name="description" content="hypega is currently under construction. Get ready for a new era in music production and technology. Coming soon.">
+    <meta name="keywords" content="hypega, music production, software, technology, startup, music, beat, audio">
+    <meta name="author" content="hypega">
+    <meta name="robots" content="index, follow">
 
+    <meta property="og:title" content="hypega | Loading...">
+    <meta property="og:description" content="We are building something great. Stay tuned.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://hypega.com">
+    <meta property="og:image" content=""> 
+
+    <style>
+        /* Tasarım kodları aynı */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: #0a0a0a; /* Siyah arka plan */
+            background-color: #0a0a0a;
             color: #ffffff;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             overflow: hidden;
         }
-
-        /* Konteyner */
         .container {
             text-align: center;
             padding: 2rem;
             max-width: 600px;
             animation: fadeIn 1.5s ease-in-out;
         }
-
-        /* Marka İsmi Tasarımı */
         .brand {
             font-size: 4rem;
             font-weight: 800;
@@ -40,27 +43,10 @@
             background: linear-gradient(45deg, #fff, #666);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            /* Küçük harf zorunluluğu olmasa bile görsel olarak garanti olsun diye: */
-            text-transform: lowercase; 
+            text-transform: lowercase;
         }
-
-        /* Başlık */
-        h2 {
-            font-size: 1.5rem;
-            font-weight: 400;
-            margin-bottom: 1rem;
-            color: #e0e0e0;
-        }
-
-        /* Açıklama Metni */
-        p {
-            color: #888;
-            line-height: 1.6;
-            margin-bottom: 2rem;
-            font-size: 1rem;
-        }
-
-        /* Yükleniyor Çubuğu */
+        h2 { font-size: 1.5rem; font-weight: 400; margin-bottom: 1rem; color: #e0e0e0; }
+        p { color: #888; line-height: 1.6; margin-bottom: 2rem; font-size: 1rem; }
         .loader {
             width: 100%;
             height: 4px;
@@ -69,7 +55,6 @@
             overflow: hidden;
             margin-top: 2rem;
         }
-
         .loader-bar {
             height: 100%;
             width: 50%;
@@ -77,35 +62,20 @@
             animation: loading 2s infinite ease-in-out;
             border-radius: 2px;
         }
-
-        /* Animasyonlar */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes loading {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(200%); }
-        }
-
-        @media (max-width: 600px) {
-            .brand { font-size: 3rem; }
-            h2 { font-size: 1.2rem; }
-        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes loading { 0% { transform: translateX(-100%); } 100% { transform: translateX(200%); } }
+        @media (max-width: 600px) { .brand { font-size: 3rem; } h2 { font-size: 1.2rem; } }
     </style>
 </head>
 <body>
 
     <div class="container">
         <div class="brand">hypega.</div>
-        
         <h2>We'll be back soon.</h2>
         <p>
-            hypega is currently down for maintenance.<br>
-            We're working on improvements and will return shortly.
+            hypega is currently evolving.<br>
+            We're crafting a new experience for music and tech enthusiasts.
         </p>
-
         <div class="loader">
             <div class="loader-bar"></div>
         </div>
