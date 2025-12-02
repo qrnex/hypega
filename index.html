@@ -3,83 +3,539 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <title>hypega | Future of Music & Tech</title>
-    <meta name="description" content="hypega is currently under construction. Get ready for a new era in music production and technology. Coming soon.">
-    <meta name="keywords" content="hypega, music production, software, technology, startup, music, beat, audio">
-    <meta name="author" content="hypega">
-    <meta name="robots" content="index, follow">
+    <title>qrnex</title>
+    <meta name="description" content="QRNEX - Producer">
+    <meta name="theme-color" content="#050714">
 
-    <meta property="og:title" content="hypega | Loading...">
-    <meta property="og:description" content="We are building something great. Stay tuned.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://hypega.com">
-    <meta property="og:image" content=""> 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;600&family=Syncopate:wght@400;700&display=swap" rel="stylesheet">
 
     <style>
-        /* Tasarım kodları aynı */
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        /* ======================================================================
+        1.0 CORE VARIABLES (DEEP MIDNIGHT THEME)
+        ======================================================================
+        */
+        :root {
+            /* Renk Paleti: Siyah DEĞİL. Derin Mavi/Lacivert ve Kırmızı */
+            --bg-deep: #050714; 
+            --bg-surface: #0a0e24;
+            --accent-red: #ff1f1f;
+            --accent-glow: rgba(255, 31, 31, 0.3);
+            --text-main: #e6e8f0;
+            --text-dim: #7a82a0;
+            --line-color: rgba(100, 116, 166, 0.1);
+            
+            --font-head: 'Syncopate', sans-serif;
+            --font-body: 'Manrope', sans-serif;
+            
+            --ease-smooth: cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        *, *::before, *::after {
+            margin: 0; padding: 0; box-sizing: border-box;
+            cursor: none; /* Mouse kontrolü bizde */
+        }
+
         body {
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #0a0a0a;
-            color: #ffffff;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            overflow: hidden;
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            font-family: var(--font-body);
+            overflow-x: hidden;
+            width: 100%;
+            height: 100%;
         }
-        .container {
-            text-align: center;
-            padding: 2rem;
-            max-width: 600px;
-            animation: fadeIn 1.5s ease-in-out;
+
+        /* ======================================================================
+        2.0 VISUAL LAYERS (ATMOSPHERE)
+        ======================================================================
+        */
+        #canvas-webgl {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+            z-index: 0; /* En altta */
         }
+
+        .texture-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
+            pointer-events: none; z-index: 1; opacity: 0.5;
+        }
+
+        .vignette {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at center, transparent 20%, var(--bg-deep) 130%);
+            pointer-events: none; z-index: 2;
+        }
+
+        /* ======================================================================
+        3.0 CUSTOM CURSOR (RED ACCENT)
+        ======================================================================
+        */
+        .cursor-dot {
+            position: fixed; top: 0; left: 0; width: 6px; height: 6px;
+            background: var(--accent-red); border-radius: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none; z-index: 9999;
+            box-shadow: 0 0 10px var(--accent-red);
+        }
+
+        .cursor-circle {
+            position: fixed; top: 0; left: 0; width: 50px; height: 50px;
+            border: 1px solid rgba(255,255,255,0.2); border-radius: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none; z-index: 9998;
+            transition: width 0.3s, height 0.3s, border-color 0.3s, background-color 0.3s;
+        }
+
+        body.hovering .cursor-circle {
+            width: 80px; height: 80px;
+            border-color: var(--accent-red);
+            background-color: rgba(255, 31, 31, 0.05);
+        }
+
+        /* ======================================================================
+        4.0 NAVIGATION
+        ======================================================================
+        */
+        nav {
+            position: fixed; top: 0; left: 0; width: 100%;
+            padding: 40px 60px;
+            display: flex; justify-content: space-between; align-items: center;
+            z-index: 100; mix-blend-mode: exclusion;
+        }
+
         .brand {
-            font-size: 4rem;
-            font-weight: 800;
+            font-family: var(--font-head); font-weight: 700;
+            letter-spacing: 2px; font-size: 14px; color: #fff;
+        }
+
+        /* ======================================================================
+        5.0 LAYOUT & SECTIONS
+        ======================================================================
+        */
+        main { position: relative; z-index: 10; width: 100%; }
+
+        section {
+            min-height: 100vh;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            position: relative;
+            padding: 20px;
+        }
+
+        /* HERO SECTION */
+        .hero-container {
+            text-align: center;
+            position: relative;
+        }
+
+        .hero-title {
+            font-family: var(--font-head);
+            font-size: clamp(3rem, 12vw, 10rem);
+            font-weight: 700;
+            line-height: 0.9;
+            color: #fff;
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 2;
+            /* Hafif mavi gölge derinlik katar */
+            text-shadow: 0 10px 40px rgba(0,0,20,0.5); 
+        }
+
+        .hero-sub {
+            font-family: var(--font-body);
+            font-size: 1.1rem;
+            letter-spacing: 0.2em;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            margin-bottom: 4rem;
+        }
+
+        .btn-wrapper {
+            display: flex; gap: 30px; justify-content: center;
+        }
+
+        .glass-btn {
+            position: relative;
+            padding: 18px 40px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #fff;
+            text-decoration: none;
+            font-family: var(--font-head);
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            overflow: hidden;
+            transition: all 0.4s var(--ease-smooth);
+        }
+
+        .glass-btn::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 0%; height: 100%;
+            background: var(--accent-red);
+            z-index: -1;
+            transition: width 0.4s var(--ease-smooth);
+        }
+
+        .glass-btn:hover { border-color: var(--accent-red); box-shadow: 0 0 30px var(--accent-glow); }
+        .glass-btn:hover::before { width: 100%; }
+
+        /* SCROLL DOWN */
+        .scroll-down {
+            position: absolute; bottom: 50px;
+            display: flex; flex-direction: column; align-items: center; gap: 15px;
+            opacity: 0.6;
+        }
+        .scroll-text {
+            font-size: 10px; font-family: var(--font-head); letter-spacing: 2px; color: var(--text-dim);
+        }
+        .scroll-line {
+            width: 1px; height: 60px; background: rgba(255,255,255,0.1); position: relative; overflow: hidden;
+        }
+        .scroll-line::after {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 50%;
+            background: var(--accent-red);
+            animation: drop 2s infinite;
+        }
+
+        /* ======================================================================
+        6.0 HYPEGA (OFFLINE MODULE)
+        ======================================================================
+        */
+        .hypega-section {
+            /* Arka plan hafif değişir ama siyah olmaz */
+            background: linear-gradient(to bottom, var(--bg-deep), #02030a); 
+            border-top: 1px solid var(--line-color);
+        }
+
+        .hypega-card {
+            width: 100%; max-width: 700px;
+            /* Glassmorphism ama koyu mavi tabanlı */
+            background: rgba(10, 14, 36, 0.4); 
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--line-color);
+            padding: 80px 60px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+
+        /* Card Decoration */
+        .deco-corner { position: absolute; width: 15px; height: 15px; border-color: var(--accent-red); border-style: solid; opacity: 0.8; }
+        .dc-tl { top: -1px; left: -1px; border-width: 2px 0 0 2px; }
+        .dc-tr { top: -1px; right: -1px; border-width: 2px 2px 0 0; }
+        .dc-bl { bottom: -1px; left: -1px; border-width: 0 0 2px 2px; }
+        .dc-br { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
+
+        .hypega-big {
+            font-family: var(--font-head);
+            font-size: 4rem; font-weight: 700;
+            color: #fff; margin-bottom: 20px;
             letter-spacing: -2px;
-            margin-bottom: 1rem;
-            background: linear-gradient(45deg, #fff, #666);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
             text-transform: lowercase;
         }
-        h2 { font-size: 1.5rem; font-weight: 400; margin-bottom: 1rem; color: #e0e0e0; }
-        p { color: #888; line-height: 1.6; margin-bottom: 2rem; font-size: 1rem; }
-        .loader {
-            width: 100%;
-            height: 4px;
-            background: #222;
-            border-radius: 2px;
-            overflow: hidden;
-            margin-top: 2rem;
+
+        .status-pill {
+            display: inline-flex; align-items: center; gap: 10px;
+            border: 1px solid var(--accent-red);
+            background: rgba(255, 31, 31, 0.05);
+            padding: 8px 16px; margin-bottom: 40px;
+            border-radius: 40px;
         }
-        .loader-bar {
-            height: 100%;
-            width: 50%;
-            background: #fff;
-            animation: loading 2s infinite ease-in-out;
-            border-radius: 2px;
+        .status-light {
+            width: 8px; height: 8px; background: var(--accent-red); border-radius: 50%;
+            box-shadow: 0 0 10px var(--accent-red);
+            animation: blink 2s infinite;
         }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes loading { 0% { transform: translateX(-100%); } 100% { transform: translateX(200%); } }
-        @media (max-width: 600px) { .brand { font-size: 3rem; } h2 { font-size: 1.2rem; } }
+        .status-txt {
+            font-family: var(--font-body); font-size: 11px; font-weight: 600;
+            color: var(--text-main); text-transform: uppercase; letter-spacing: 1px;
+        }
+
+        .hypega-social {
+            display: inline-block;
+            font-family: var(--font-head); font-size: 0.9rem;
+            color: var(--text-dim); text-decoration: none;
+            transition: color 0.3s; margin-top: 20px;
+        }
+        .hypega-social:hover { color: #fff; }
+
+        /* FOOTER */
+        footer {
+            padding: 60px; background: #020308;
+            border-top: 1px solid var(--line-color);
+            display: flex; justify-content: space-between;
+            font-family: var(--font-body); font-size: 12px; color: var(--text-dim);
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+
+        /* ANIMATIONS */
+        @keyframes drop { 0% { top: -100%; } 100% { top: 100%; } }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .hero-title { font-size: 16vw; }
+            .hypega-card { padding: 50px 20px; border: none; background: transparent; }
+            .hypega-big { font-size: 3rem; }
+            nav { padding: 30px; }
+            footer { flex-direction: column; align-items: center; gap: 10px; }
+        }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <div class="brand">hypega.</div>
-        <h2>We'll be back soon.</h2>
-        <p>
-            hypega is currently evolving.<br>
-            We're crafting a new experience for music and tech enthusiasts.
-        </p>
-        <div class="loader">
-            <div class="loader-bar"></div>
-        </div>
-    </div>
+    <canvas id="canvas-webgl"></canvas>
+    <div class="texture-overlay"></div>
+    <div class="vignette"></div>
 
+    <div class="cursor-dot"></div>
+    <div class="cursor-circle"></div>
+
+    <nav>
+        <div class="brand">QRNEX</div>
+    </nav>
+
+    <main>
+        
+        <section>
+            <div class="hero-container">
+                <h1 class="hero-title">QRNEX</h1>
+                <div class="hero-sub">Music Producer & Sound Engineer</div>
+                
+                <div class="btn-wrapper">
+                    <a href="https://instagram.com/qrnex" target="_blank" class="glass-btn">INSTAGRAM</a>
+                    <a href="mailto:tamer@hypega.com" class="glass-btn">CONTACT</a>
+                </div>
+            </div>
+
+            <div class="scroll-down">
+                <div class="scroll-line"></div>
+            </div>
+        </section>
+
+        <section class="hypega-section">
+            <div class="hypega-card">
+                <div class="deco-corner dc-tl"></div>
+                <div class="deco-corner dc-tr"></div>
+                <div class="deco-corner dc-bl"></div>
+                <div class="deco-corner dc-br"></div>
+
+                <div class="hypega-big">hypega</div>
+
+                <div class="status-pill">
+                    <div class="status-light"></div>
+                    <span class="status-txt">Offline / Under Construction</span>
+                </div>
+
+                <div style="height: 1px; width: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent); margin: 30px 0;"></div>
+
+                <a href="https://instagram.com/hypega" target="_blank" class="hypega-social">@HYPEGA</a>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <div>© 2025 HYPEGA</div>
+        <div>ALL RIGHTS RESERVED</div>
+    </footer>
+
+    <script>
+        // ----------------------------------------------------------------
+        // 1. CURSOR LOGIC (SMOOTH FOLLOW)
+        // ----------------------------------------------------------------
+        const dot = document.querySelector('.cursor-dot');
+        const circle = document.querySelector('.cursor-circle');
+        let mouseX = window.innerWidth / 2;
+        let mouseY = window.innerHeight / 2;
+        let circleX = mouseX;
+        let circleY = mouseY;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            dot.style.transform = `translate(${mouseX}px, ${mouseY}px) translate(-50%, -50%)`;
+        });
+
+        function animateCursor() {
+            // Lerp (Linear Interpolation) for smoothness
+            circleX += (mouseX - circleX) * 0.15;
+            circleY += (mouseY - circleY) * 0.15;
+            circle.style.transform = `translate(${circleX}px, ${circleY}px) translate(-50%, -50%)`;
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+
+        // Hover triggers
+        const interactables = document.querySelectorAll('a');
+        interactables.forEach(el => {
+            el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
+            el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
+        });
+
+        // ----------------------------------------------------------------
+        // 2. WEBGL FLUID NEBULA ENGINE (CUSTOM SHADERS)
+        // ----------------------------------------------------------------
+        const canvas = document.getElementById('canvas-webgl');
+        const gl = canvas.getContext('webgl');
+
+        if (!gl) console.error("WebGL Failed");
+
+        // Vertex Shader (Positions)
+        const vsSource = `
+            attribute vec2 a_position;
+            void main() {
+                gl_Position = vec4(a_position, 0.0, 1.0);
+            }
+        `;
+
+        // Fragment Shader (The Visuals - Deep Blue/Red Nebula)
+        const fsSource = `
+            precision highp float;
+            uniform vec2 u_resolution;
+            uniform float u_time;
+            uniform vec2 u_mouse;
+
+            // Random Noise Function
+            float random (in vec2 _st) {
+                return fract(sin(dot(_st.xy, vec2(12.9898,78.233))) * 43758.5453123);
+            }
+
+            // Value Noise
+            float noise (in vec2 _st) {
+                vec2 i = floor(_st);
+                vec2 f = fract(_st);
+                float a = random(i);
+                float b = random(i + vec2(1.0, 0.0));
+                float c = random(i + vec2(0.0, 1.0));
+                float d = random(i + vec2(1.0, 1.0));
+                vec2 u = f * f * (3.0 - 2.0 * f);
+                return mix(a, b, u.x) + (c - a)* u.y * (1.0 - u.x) + (d - b) * u.x * u.y;
+            }
+
+            // Fractal Brownian Motion (Cloud effect)
+            float fbm ( in vec2 _st) {
+                float v = 0.0;
+                float a = 0.5;
+                vec2 shift = vec2(100.0);
+                mat2 rot = mat2(cos(0.5), sin(0.5), -sin(0.5), cos(0.50));
+                for (int i = 0; i < 5; ++i) {
+                    v += a * noise(_st);
+                    _st = rot * _st * 2.0 + shift;
+                    a *= 0.5;
+                }
+                return v;
+            }
+
+            void main() {
+                vec2 st = gl_FragCoord.xy/u_resolution.xy;
+                st.x *= u_resolution.x/u_resolution.y;
+
+                vec2 mouse = u_mouse / u_resolution.xy;
+                
+                // Motion parameters
+                vec2 q = vec2(0.);
+                q.x = fbm( st + 0.00 * u_time);
+                q.y = fbm( st + vec2(1.0));
+
+                vec2 r = vec2(0.);
+                r.x = fbm( st + 1.0*q + vec2(1.7,9.2)+ 0.15*u_time );
+                r.y = fbm( st + 1.0*q + vec2(8.3,2.8)+ 0.126*u_time);
+
+                float f = fbm(st+r);
+
+                // COLOR PALETTE MIXING (DERİN MAVİ + KIRMIZI)
+                
+                // Base Color: Very Dark Navy (Neredeyse Siyah ama Mavi)
+                vec3 color = vec3(0.02, 0.03, 0.08);
+
+                // Secondary: Midnight Blue
+                vec3 color2 = vec3(0.1, 0.15, 0.4);
+                
+                // Accent: Crimson Red (Deep)
+                vec3 color3 = vec3(0.6, 0.05, 0.1);
+
+                // Mixing logic
+                color = mix(color, color2, clamp((f*f)*4.0, 0.0, 1.0));
+                color = mix(color, color3, clamp(length(q), 0.0, 1.0));
+                
+                // Highlight based on complexity
+                color += vec3(0.2, 0.3, 0.7) * pow(f, 3.0);
+
+                // Slight Mouse Interaction (Glow)
+                float dist = distance(st, vec2(mouse.x * (u_resolution.x/u_resolution.y), 1.0 - mouse.y));
+                color += vec3(0.2, 0.0, 0.0) * smoothstep(0.5, 0.0, dist);
+
+                gl_FragColor = vec4(color, 1.0);
+            }
+        `;
+
+        function createShader(gl, type, source) {
+            const shader = gl.createShader(type);
+            gl.shaderSource(shader, source);
+            gl.compileShader(shader);
+            if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+                console.error(gl.getShaderInfoLog(shader));
+                gl.deleteShader(shader);
+                return null;
+            }
+            return shader;
+        }
+
+        const program = gl.createProgram();
+        const vs = createShader(gl, gl.VERTEX_SHADER, vsSource);
+        const fs = createShader(gl, gl.FRAGMENT_SHADER, fsSource);
+        gl.attachShader(program, vs);
+        gl.attachShader(program, fs);
+        gl.linkProgram(program);
+        gl.useProgram(program);
+
+        // Buffer Geometry
+        const posBuff = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, posBuff);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+            -1.0, -1.0,
+             1.0, -1.0,
+            -1.0,  1.0,
+            -1.0,  1.0,
+             1.0, -1.0,
+             1.0,  1.0,
+        ]), gl.STATIC_DRAW);
+
+        const posLoc = gl.getAttribLocation(program, "a_position");
+        gl.enableVertexAttribArray(posLoc);
+        gl.vertexAttribPointer(posLoc, 2, gl.FLOAT, false, 0, 0);
+
+        // Uniforms
+        const uRes = gl.getUniformLocation(program, "u_resolution");
+        const uTime = gl.getUniformLocation(program, "u_time");
+        const uMouse = gl.getUniformLocation(program, "u_mouse");
+
+        let w, h;
+        function resize() {
+            w = canvas.width = window.innerWidth;
+            h = canvas.height = window.innerHeight;
+            gl.viewport(0, 0, w, h);
+            gl.uniform2f(uRes, w, h);
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        let mouse = { x: 0, y: 0 };
+        document.addEventListener('mousemove', e => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+        });
+
+        function render(time) {
+            time *= 0.0005; // Yavaşlatılmış zaman (ağır atmosfer)
+            gl.uniform1f(uTime, time);
+            gl.uniform2f(uMouse, mouse.x, mouse.y);
+            gl.drawArrays(gl.TRIANGLES, 0, 6);
+            requestAnimationFrame(render);
+        }
+        requestAnimationFrame(render);
+
+    </script>
 </body>
 </html>
