@@ -1,540 +1,638 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="no-js">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>qrnex</title>
-    <meta name="description" content="QRNEX - Producer">
-    <meta name="theme-color" content="#050714">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="theme-color" content="#000000">
+
+    <title>QRNEX | Music Producer</title>
+    
+    <meta name="description" content="QRNEX. Music Producer & Sound Engineer. High-fidelity audio architecture. Managing HYPEGA operations.">
+    <meta name="keywords" content="QRNEX, Music Producer, Sound Engineer, Beatmaker, Mixing, Mastering, Hypega">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <meta name="author" content="QRNEX">
+    
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://qrnex.com/">
+    <meta property="og:title" content="QRNEX">
+    <meta property="og:description" content="Music Producer. Audio Engineer.">
+    <meta property="og:image" content="https://qrnex.com/assets/og-image.jpg">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "QRNEX",
+      "url": "https://qrnex.com",
+      "jobTitle": "Music Producer",
+      "sameAs": [
+        "https://instagram.com/qrnex"
+      ],
+      "worksFor": {
+        "@type": "Organization",
+        "name": "HYPEGA"
+      }
+    }
+    </script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;600&family=Syncopate:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;800&display=swap" rel="stylesheet">
 
     <style>
         /* ======================================================================
-        1.0 CORE VARIABLES (DEEP MIDNIGHT THEME)
-        ======================================================================
-        */
+           1.0 CORE RESET & VARIABLES (SYSTEM LEVEL)
+        ====================================================================== */
         :root {
-            /* Renk Paleti: Siyah DEĞİL. Derin Mavi/Lacivert ve Kırmızı */
-            --bg-deep: #050714; 
-            --bg-surface: #0a0e24;
-            --accent-red: #ff1f1f;
-            --accent-glow: rgba(255, 31, 31, 0.3);
-            --text-main: #e6e8f0;
-            --text-dim: #7a82a0;
-            --line-color: rgba(100, 116, 166, 0.1);
+            --color-void: #030303;
+            --color-matter: #0a0a0a;
+            --color-text: #ffffff;
+            --color-muted: #666666;
+            --color-glass: rgba(255, 255, 255, 0.03);
+            --color-border: rgba(255, 255, 255, 0.1);
             
-            --font-head: 'Syncopate', sans-serif;
-            --font-body: 'Manrope', sans-serif;
+            --font-stack: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             
-            --ease-smooth: cubic-bezier(0.23, 1, 0.32, 1);
+            --ease-apple: cubic-bezier(0.25, 1, 0.5, 1);
+            --ease-sharp: cubic-bezier(0.19, 1, 0.22, 1);
+            
+            --spacing-container: 6vw;
         }
 
         *, *::before, *::after {
-            margin: 0; padding: 0; box-sizing: border-box;
-            cursor: none; /* Mouse kontrolü bizde */
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            cursor: none; /* OS Cursor Disabled */
         }
 
-        body {
-            background-color: var(--bg-deep);
-            color: var(--text-main);
-            font-family: var(--font-body);
-            overflow-x: hidden;
+        html, body {
             width: 100%;
             height: 100%;
+            background-color: var(--color-void);
+            color: var(--color-text);
+            font-family: var(--font-stack);
+            overflow: hidden; /* Custom Scroll will handle this */
+            font-size: 16px;
+        }
+
+        ::selection {
+            background: var(--color-text);
+            color: var(--color-void);
         }
 
         /* ======================================================================
-        2.0 VISUAL LAYERS (ATMOSPHERE)
-        ======================================================================
-        */
-        #canvas-webgl {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-            z-index: 0; /* En altta */
+           2.0 UTILITY LAYERS
+        ====================================================================== */
+        /* WebGL Canvas */
+        #gl-renderer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
         }
 
-        .texture-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
-            pointer-events: none; z-index: 1; opacity: 0.5;
+        /* Grain Overlay (Tactile Feel) */
+        .film-grain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.04;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='1'/%3E%3C/svg%3E");
         }
 
-        .vignette {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at center, transparent 20%, var(--bg-deep) 130%);
-            pointer-events: none; z-index: 2;
-        }
-
-        /* ======================================================================
-        3.0 CUSTOM CURSOR (RED ACCENT)
-        ======================================================================
-        */
-        .cursor-dot {
-            position: fixed; top: 0; left: 0; width: 6px; height: 6px;
-            background: var(--accent-red); border-radius: 50%;
-            transform: translate(-50%, -50%);
-            pointer-events: none; z-index: 9999;
-            box-shadow: 0 0 10px var(--accent-red);
-        }
-
-        .cursor-circle {
-            position: fixed; top: 0; left: 0; width: 50px; height: 50px;
-            border: 1px solid rgba(255,255,255,0.2); border-radius: 50%;
-            transform: translate(-50%, -50%);
-            pointer-events: none; z-index: 9998;
-            transition: width 0.3s, height 0.3s, border-color 0.3s, background-color 0.3s;
-        }
-
-        body.hovering .cursor-circle {
-            width: 80px; height: 80px;
-            border-color: var(--accent-red);
-            background-color: rgba(255, 31, 31, 0.05);
-        }
-
-        /* ======================================================================
-        4.0 NAVIGATION
-        ======================================================================
-        */
-        nav {
-            position: fixed; top: 0; left: 0; width: 100%;
-            padding: 40px 60px;
-            display: flex; justify-content: space-between; align-items: center;
-            z-index: 100; mix-blend-mode: exclusion;
-        }
-
-        .brand {
-            font-family: var(--font-head); font-weight: 700;
-            letter-spacing: 2px; font-size: 14px; color: #fff;
-        }
-
-        /* ======================================================================
-        5.0 LAYOUT & SECTIONS
-        ======================================================================
-        */
-        main { position: relative; z-index: 10; width: 100%; }
-
-        section {
-            min-height: 100vh;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            position: relative;
-            padding: 20px;
-        }
-
-        /* HERO SECTION */
-        .hero-container {
-            text-align: center;
-            position: relative;
-        }
-
-        .hero-title {
-            font-family: var(--font-head);
-            font-size: clamp(3rem, 12vw, 10rem);
-            font-weight: 700;
-            line-height: 0.9;
-            color: #fff;
-            margin-bottom: 2rem;
-            position: relative;
-            z-index: 2;
-            /* Hafif mavi gölge derinlik katar */
-            text-shadow: 0 10px 40px rgba(0,0,20,0.5); 
-        }
-
-        .hero-sub {
-            font-family: var(--font-body);
-            font-size: 1.1rem;
-            letter-spacing: 0.2em;
-            color: var(--text-dim);
-            text-transform: uppercase;
-            margin-bottom: 4rem;
-        }
-
-        .btn-wrapper {
-            display: flex; gap: 30px; justify-content: center;
-        }
-
-        .glass-btn {
-            position: relative;
-            padding: 18px 40px;
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.1);
-            color: #fff;
-            text-decoration: none;
-            font-family: var(--font-head);
-            font-size: 0.7rem;
-            font-weight: 700;
-            letter-spacing: 2px;
+        /* Viewport Container for Virtual Scroll */
+        .viewport {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
             overflow: hidden;
-            transition: all 0.4s var(--ease-smooth);
         }
 
-        .glass-btn::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 0%; height: 100%;
-            background: var(--accent-red);
-            z-index: -1;
-            transition: width 0.4s var(--ease-smooth);
+        .scroll-content {
+            width: 100%;
+            will-change: transform;
+            position: absolute;
+            top: 0;
+            left: 0;
         }
 
-        .glass-btn:hover { border-color: var(--accent-red); box-shadow: 0 0 30px var(--accent-glow); }
-        .glass-btn:hover::before { width: 100%; }
-
-        /* SCROLL DOWN */
-        .scroll-down {
-            position: absolute; bottom: 50px;
-            display: flex; flex-direction: column; align-items: center; gap: 15px;
-            opacity: 0.6;
-        }
-        .scroll-text {
-            font-size: 10px; font-family: var(--font-head); letter-spacing: 2px; color: var(--text-dim);
-        }
-        .scroll-line {
-            width: 1px; height: 60px; background: rgba(255,255,255,0.1); position: relative; overflow: hidden;
-        }
-        .scroll-line::after {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 50%;
-            background: var(--accent-red);
-            animation: drop 2s infinite;
+        .container {
+            width: 100%;
+            padding: 0 var(--spacing-container);
+            max-width: 1800px;
+            margin: 0 auto;
         }
 
         /* ======================================================================
-        6.0 HYPEGA (OFFLINE MODULE)
-        ======================================================================
-        */
-        .hypega-section {
-            /* Arka plan hafif değişir ama siyah olmaz */
-            background: linear-gradient(to bottom, var(--bg-deep), #02030a); 
-            border-top: 1px solid var(--line-color);
+           3.0 TYPOGRAPHY SYSTEM (BALENCIAGA SCALE)
+        ====================================================================== */
+        .hero-title {
+            font-size: 16vw; /* Massive */
+            font-weight: 800;
+            letter-spacing: -0.06em;
+            line-height: 0.8;
+            text-transform: uppercase;
+            margin-left: -0.8vw;
+            color: var(--color-text);
+            transform-origin: left;
         }
 
-        .hypega-card {
-            width: 100%; max-width: 700px;
-            /* Glassmorphism ama koyu mavi tabanlı */
-            background: rgba(10, 14, 36, 0.4); 
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--line-color);
-            padding: 80px 60px;
-            text-align: center;
+        .hero-role {
+            font-size: 1.5rem;
+            font-weight: 400;
+            color: var(--color-muted);
+            margin-top: 4vh;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .hero-role::before {
+            content: '';
+            width: 40px;
+            height: 1px;
+            background: var(--color-muted);
+            display: block;
+        }
+
+        /* ======================================================================
+           4.0 CUSTOM CURSOR (PHYSICS)
+        ====================================================================== */
+        .cursor-wrapper {
+            position: fixed;
+            top: 0; left: 0;
+            z-index: 9999;
+            pointer-events: none;
+            mix-blend-mode: difference;
+        }
+
+        .cursor-dot {
+            width: 8px; height: 8px;
+            background: #fff;
+            border-radius: 50%;
+            position: absolute;
+            transform: translate(-50%, -50%);
+        }
+
+        .cursor-ring {
+            width: 50px; height: 50px;
+            border: 1px solid rgba(255,255,255,0.4);
+            border-radius: 50%;
+            position: absolute;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s var(--ease-apple), height 0.3s var(--ease-apple);
+        }
+
+        body.hover-state .cursor-ring {
+            width: 80px; height: 80px;
+            background: #fff;
+            border-color: transparent;
+        }
+
+        /* ======================================================================
+           5.0 SECTIONS & LAYOUT
+        ====================================================================== */
+        section {
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
             position: relative;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            border-bottom: 1px solid var(--color-border);
         }
 
-        /* Card Decoration */
-        .deco-corner { position: absolute; width: 15px; height: 15px; border-color: var(--accent-red); border-style: solid; opacity: 0.8; }
-        .dc-tl { top: -1px; left: -1px; border-width: 2px 0 0 2px; }
-        .dc-tr { top: -1px; right: -1px; border-width: 2px 2px 0 0; }
-        .dc-bl { bottom: -1px; left: -1px; border-width: 0 0 2px 2px; }
-        .dc-br { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
-
-        .hypega-big {
-            font-family: var(--font-head);
-            font-size: 4rem; font-weight: 700;
-            color: #fff; margin-bottom: 20px;
-            letter-spacing: -2px;
-            text-transform: lowercase;
+        /* QRNEX SECTION */
+        .section-qrnex {
+            align-items: flex-start;
+            padding-top: 10vh;
         }
 
-        .status-pill {
-            display: inline-flex; align-items: center; gap: 10px;
-            border: 1px solid var(--accent-red);
-            background: rgba(255, 31, 31, 0.05);
-            padding: 8px 16px; margin-bottom: 40px;
-            border-radius: 40px;
-        }
-        .status-light {
-            width: 8px; height: 8px; background: var(--accent-red); border-radius: 50%;
-            box-shadow: 0 0 10px var(--accent-red);
-            animation: blink 2s infinite;
-        }
-        .status-txt {
-            font-family: var(--font-body); font-size: 11px; font-weight: 600;
-            color: var(--text-main); text-transform: uppercase; letter-spacing: 1px;
+        .title-mask {
+            overflow: hidden;
+            display: block;
         }
 
-        .hypega-social {
-            display: inline-block;
-            font-family: var(--font-head); font-size: 0.9rem;
-            color: var(--text-dim); text-decoration: none;
-            transition: color 0.3s; margin-top: 20px;
+        .reveal-text {
+            display: block;
+            transform: translateY(110%);
+            opacity: 0;
+            animation: slideUp 1.2s var(--ease-sharp) forwards;
         }
-        .hypega-social:hover { color: #fff; }
+        
+        .nav-links {
+            margin-top: 60px;
+            display: flex;
+            gap: 40px;
+            opacity: 0;
+            animation: fade 1s 1s forwards;
+        }
+
+        .minimal-link {
+            text-decoration: none;
+            color: var(--color-text);
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            position: relative;
+            padding-bottom: 5px;
+        }
+
+        .minimal-link::after {
+            content: '';
+            position: absolute; bottom: 0; left: 0; width: 0; height: 1px;
+            background: #fff;
+            transition: width 0.3s var(--ease-apple);
+        }
+        
+        .minimal-link:hover::after { width: 100%; }
+
+        /* HYPEGA SECTION (THE VAULT) */
+        .section-hypega {
+            align-items: center;
+            background: #000;
+        }
+
+        .hypega-box {
+            width: 100%;
+            max-width: 600px;
+            padding: 80px 0;
+            border: 1px solid var(--color-border);
+            background: rgba(10,10,10,0.8);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: border-color 0.5s;
+        }
+        
+        .hypega-box:hover {
+            border-color: #fff;
+        }
+
+        .hypega-title {
+            font-size: 5rem;
+            font-weight: 700;
+            letter-spacing: -0.04em;
+            margin-bottom: 30px;
+            color: #fff;
+        }
+
+        .status-badge {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: #444;
+            border: 1px solid #222;
+            padding: 10px 20px;
+            border-radius: 50px;
+            margin-bottom: 40px;
+        }
+
+        .hypega-btn {
+            font-size: 13px;
+            color: var(--color-muted);
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            transition: color 0.3s;
+        }
+        .hypega-btn:hover { color: #fff; }
 
         /* FOOTER */
-        footer {
-            padding: 60px; background: #020308;
-            border-top: 1px solid var(--line-color);
-            display: flex; justify-content: space-between;
-            font-family: var(--font-body); font-size: 12px; color: var(--text-dim);
-            text-transform: uppercase; letter-spacing: 1px;
+        .footer-min {
+            padding: 40px 0;
+            display: flex;
+            justify-content: center;
+            opacity: 0.3;
+        }
+        .copyright {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
         }
 
         /* ANIMATIONS */
-        @keyframes drop { 0% { top: -100%; } 100% { top: 100%; } }
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+        @keyframes slideUp {
+            0% { transform: translateY(110%); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+        
+        @keyframes fade {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
 
         /* RESPONSIVE */
         @media (max-width: 768px) {
-            .hero-title { font-size: 16vw; }
-            .hypega-card { padding: 50px 20px; border: none; background: transparent; }
-            .hypega-big { font-size: 3rem; }
-            nav { padding: 30px; }
-            footer { flex-direction: column; align-items: center; gap: 10px; }
+            .hero-title { font-size: 20vw; }
+            .hero-role { font-size: 1.1rem; }
+            .hypega-title { font-size: 15vw; }
+            .hypega-box { border-left: none; border-right: none; }
         }
+
     </style>
 </head>
 <body>
 
-    <canvas id="canvas-webgl"></canvas>
-    <div class="texture-overlay"></div>
-    <div class="vignette"></div>
+    <canvas id="gl-renderer"></canvas>
+    <div class="film-grain"></div>
 
-    <div class="cursor-dot"></div>
-    <div class="cursor-circle"></div>
+    <div class="cursor-wrapper">
+        <div class="cursor-dot"></div>
+        <div class="cursor-ring"></div>
+    </div>
 
-    <nav>
-        <div class="brand">QRNEX</div>
-    </nav>
+    <main class="viewport">
+        <div class="scroll-content" id="scroller">
 
-    <main>
-        
-        <section>
-            <div class="hero-container">
-                <h1 class="hero-title">QRNEX</h1>
-                <div class="hero-sub">Music Producer & Sound Engineer</div>
-                
-                <div class="btn-wrapper">
-                    <a href="https://instagram.com/qrnex" target="_blank" class="glass-btn">INSTAGRAM</a>
-                    <a href="mailto:tamer@hypega.com" class="glass-btn">CONTACT</a>
+            <section class="section-qrnex">
+                <div class="container">
+                    <div class="title-mask">
+                        <h1 class="hero-title reveal-text">QRNEX</h1>
+                    </div>
+                    
+                    <div class="title-mask">
+                        <div class="hero-role reveal-text" style="animation-delay: 0.2s;">
+                            Music Producer
+                        </div>
+                    </div>
+
+                    <nav class="nav-links">
+                        <a href="https://instagram.com/qrnex" target="_blank" class="minimal-link">Instagram</a>
+                        <a href="mailto:tamer@hypega.com" class="minimal-link">Contact</a>
+                    </nav>
                 </div>
-            </div>
+            </section>
 
-            <div class="scroll-down">
-                <div class="scroll-line"></div>
-            </div>
-        </section>
-
-        <section class="hypega-section">
-            <div class="hypega-card">
-                <div class="deco-corner dc-tl"></div>
-                <div class="deco-corner dc-tr"></div>
-                <div class="deco-corner dc-bl"></div>
-                <div class="deco-corner dc-br"></div>
-
-                <div class="hypega-big">hypega</div>
-
-                <div class="status-pill">
-                    <div class="status-light"></div>
-                    <span class="status-txt">Offline / Under Construction</span>
+            <section class="section-hypega">
+                <div class="container" style="display:flex; justify-content:center;">
+                    <div class="hypega-box">
+                        <h2 class="hypega-title">HYPEGA</h2>
+                        <div class="status-badge">Offline / Under Construction</div>
+                        <a href="https://instagram.com/hypega" target="_blank" class="hypega-btn">@HYPEGA</a>
+                    </div>
                 </div>
+            </section>
 
-                <div style="height: 1px; width: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent); margin: 30px 0;"></div>
+            <footer class="footer-min">
+                <span class="copyright">© 2025</span>
+            </footer>
 
-                <a href="https://instagram.com/hypega" target="_blank" class="hypega-social">@HYPEGA</a>
-            </div>
-        </section>
-
+        </div>
     </main>
 
-    <footer>
-        <div>© 2025 HYPEGA</div>
-        <div>ALL RIGHTS RESERVED</div>
-    </footer>
-
     <script>
-        // ----------------------------------------------------------------
-        // 1. CURSOR LOGIC (SMOOTH FOLLOW)
-        // ----------------------------------------------------------------
-        const dot = document.querySelector('.cursor-dot');
-        const circle = document.querySelector('.cursor-circle');
-        let mouseX = window.innerWidth / 2;
-        let mouseY = window.innerHeight / 2;
-        let circleX = mouseX;
-        let circleY = mouseY;
+        /**
+         * ------------------------------------------------------------------
+         * MODULE 1: INERTIA SCROLL (SMOOTHNESS)
+         * Apple-like friction physics.
+         * ------------------------------------------------------------------
+         */
+        class VirtualScroll {
+            constructor() {
+                this.DOM = {
+                    container: document.querySelector('.viewport'),
+                    content: document.querySelector('.scroll-content')
+                };
+                
+                this.state = {
+                    current: 0,
+                    target: 0,
+                    limit: 0
+                };
+                
+                this.config = {
+                    ease: 0.08, // Ağır ve yumuşak
+                };
 
-        document.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-            dot.style.transform = `translate(${mouseX}px, ${mouseY}px) translate(-50%, -50%)`;
-        });
-
-        function animateCursor() {
-            // Lerp (Linear Interpolation) for smoothness
-            circleX += (mouseX - circleX) * 0.15;
-            circleY += (mouseY - circleY) * 0.15;
-            circle.style.transform = `translate(${circleX}px, ${circleY}px) translate(-50%, -50%)`;
-            requestAnimationFrame(animateCursor);
-        }
-        animateCursor();
-
-        // Hover triggers
-        const interactables = document.querySelectorAll('a');
-        interactables.forEach(el => {
-            el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
-            el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
-        });
-
-        // ----------------------------------------------------------------
-        // 2. WEBGL FLUID NEBULA ENGINE (CUSTOM SHADERS)
-        // ----------------------------------------------------------------
-        const canvas = document.getElementById('canvas-webgl');
-        const gl = canvas.getContext('webgl');
-
-        if (!gl) console.error("WebGL Failed");
-
-        // Vertex Shader (Positions)
-        const vsSource = `
-            attribute vec2 a_position;
-            void main() {
-                gl_Position = vec4(a_position, 0.0, 1.0);
-            }
-        `;
-
-        // Fragment Shader (The Visuals - Deep Blue/Red Nebula)
-        const fsSource = `
-            precision highp float;
-            uniform vec2 u_resolution;
-            uniform float u_time;
-            uniform vec2 u_mouse;
-
-            // Random Noise Function
-            float random (in vec2 _st) {
-                return fract(sin(dot(_st.xy, vec2(12.9898,78.233))) * 43758.5453123);
+                this.init();
             }
 
-            // Value Noise
-            float noise (in vec2 _st) {
-                vec2 i = floor(_st);
-                vec2 f = fract(_st);
-                float a = random(i);
-                float b = random(i + vec2(1.0, 0.0));
-                float c = random(i + vec2(0.0, 1.0));
-                float d = random(i + vec2(1.0, 1.0));
-                vec2 u = f * f * (3.0 - 2.0 * f);
-                return mix(a, b, u.x) + (c - a)* u.y * (1.0 - u.x) + (d - b) * u.x * u.y;
+            init() {
+                this.calcHeight();
+                window.addEventListener('resize', () => this.calcHeight());
+                window.addEventListener('scroll', () => {
+                    this.state.target = window.scrollY;
+                });
+                
+                this.animate();
             }
 
-            // Fractal Brownian Motion (Cloud effect)
-            float fbm ( in vec2 _st) {
-                float v = 0.0;
-                float a = 0.5;
-                vec2 shift = vec2(100.0);
-                mat2 rot = mat2(cos(0.5), sin(0.5), -sin(0.5), cos(0.50));
-                for (int i = 0; i < 5; ++i) {
-                    v += a * noise(_st);
-                    _st = rot * _st * 2.0 + shift;
-                    a *= 0.5;
+            calcHeight() {
+                // Set body height to allow native scrollbar to work while we translate visuals
+                document.body.style.height = `${this.DOM.content.getBoundingClientRect().height}px`;
+            }
+
+            animate() {
+                // Linear Interpolation
+                this.state.current += (this.state.target - this.state.current) * this.config.ease;
+                
+                // Precision clamp
+                if(Math.abs(this.state.target - this.state.current) < 0.1) {
+                    this.state.current = this.state.target;
                 }
-                return v;
+
+                // Apply transform
+                this.DOM.content.style.transform = `translate3d(0, -${this.state.current}px, 0)`;
+                
+                requestAnimationFrame(() => this.animate());
             }
-
-            void main() {
-                vec2 st = gl_FragCoord.xy/u_resolution.xy;
-                st.x *= u_resolution.x/u_resolution.y;
-
-                vec2 mouse = u_mouse / u_resolution.xy;
-                
-                // Motion parameters
-                vec2 q = vec2(0.);
-                q.x = fbm( st + 0.00 * u_time);
-                q.y = fbm( st + vec2(1.0));
-
-                vec2 r = vec2(0.);
-                r.x = fbm( st + 1.0*q + vec2(1.7,9.2)+ 0.15*u_time );
-                r.y = fbm( st + 1.0*q + vec2(8.3,2.8)+ 0.126*u_time);
-
-                float f = fbm(st+r);
-
-                // COLOR PALETTE MIXING (DERİN MAVİ + KIRMIZI)
-                
-                // Base Color: Very Dark Navy (Neredeyse Siyah ama Mavi)
-                vec3 color = vec3(0.02, 0.03, 0.08);
-
-                // Secondary: Midnight Blue
-                vec3 color2 = vec3(0.1, 0.15, 0.4);
-                
-                // Accent: Crimson Red (Deep)
-                vec3 color3 = vec3(0.6, 0.05, 0.1);
-
-                // Mixing logic
-                color = mix(color, color2, clamp((f*f)*4.0, 0.0, 1.0));
-                color = mix(color, color3, clamp(length(q), 0.0, 1.0));
-                
-                // Highlight based on complexity
-                color += vec3(0.2, 0.3, 0.7) * pow(f, 3.0);
-
-                // Slight Mouse Interaction (Glow)
-                float dist = distance(st, vec2(mouse.x * (u_resolution.x/u_resolution.y), 1.0 - mouse.y));
-                color += vec3(0.2, 0.0, 0.0) * smoothstep(0.5, 0.0, dist);
-
-                gl_FragColor = vec4(color, 1.0);
-            }
-        `;
-
-        function createShader(gl, type, source) {
-            const shader = gl.createShader(type);
-            gl.shaderSource(shader, source);
-            gl.compileShader(shader);
-            if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-                console.error(gl.getShaderInfoLog(shader));
-                gl.deleteShader(shader);
-                return null;
-            }
-            return shader;
         }
 
-        const program = gl.createProgram();
-        const vs = createShader(gl, gl.VERTEX_SHADER, vsSource);
-        const fs = createShader(gl, gl.FRAGMENT_SHADER, fsSource);
-        gl.attachShader(program, vs);
-        gl.attachShader(program, fs);
-        gl.linkProgram(program);
-        gl.useProgram(program);
-
-        // Buffer Geometry
-        const posBuff = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, posBuff);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
-            -1.0, -1.0,
-             1.0, -1.0,
-            -1.0,  1.0,
-            -1.0,  1.0,
-             1.0, -1.0,
-             1.0,  1.0,
-        ]), gl.STATIC_DRAW);
-
-        const posLoc = gl.getAttribLocation(program, "a_position");
-        gl.enableVertexAttribArray(posLoc);
-        gl.vertexAttribPointer(posLoc, 2, gl.FLOAT, false, 0, 0);
-
-        // Uniforms
-        const uRes = gl.getUniformLocation(program, "u_resolution");
-        const uTime = gl.getUniformLocation(program, "u_time");
-        const uMouse = gl.getUniformLocation(program, "u_mouse");
-
-        let w, h;
-        function resize() {
-            w = canvas.width = window.innerWidth;
-            h = canvas.height = window.innerHeight;
-            gl.viewport(0, 0, w, h);
-            gl.uniform2f(uRes, w, h);
-        }
-        window.addEventListener('resize', resize);
-        resize();
-
-        let mouse = { x: 0, y: 0 };
-        document.addEventListener('mousemove', e => {
+        /**
+         * ------------------------------------------------------------------
+         * MODULE 2: MOUSE PHYSICS
+         * ------------------------------------------------------------------
+         */
+        const cursorDot = document.querySelector('.cursor-dot');
+        const cursorRing = document.querySelector('.cursor-ring');
+        
+        let mouse = { x: window.innerWidth/2, y: window.innerHeight/2 };
+        let pos = { x: window.innerWidth/2, y: window.innerHeight/2 };
+        
+        document.addEventListener('mousemove', (e) => {
             mouse.x = e.clientX;
             mouse.y = e.clientY;
+            
+            // Dot follows instantly
+            cursorDot.style.transform = `translate3d(${mouse.x}px, ${mouse.y}px, 0) translate(-50%, -50%)`;
         });
 
-        function render(time) {
-            time *= 0.0005; // Yavaşlatılmış zaman (ağır atmosfer)
-            gl.uniform1f(uTime, time);
-            gl.uniform2f(uMouse, mouse.x, mouse.y);
-            gl.drawArrays(gl.TRIANGLES, 0, 6);
-            requestAnimationFrame(render);
+        const loopCursor = () => {
+            // Ring follows with lag
+            pos.x += (mouse.x - pos.x) * 0.15;
+            pos.y += (mouse.y - pos.y) * 0.15;
+            
+            cursorRing.style.transform = `translate3d(${pos.x}px, ${pos.y}px, 0) translate(-50%, -50%)`;
+            
+            requestAnimationFrame(loopCursor);
+        };
+        loopCursor();
+
+        // Hover triggers
+        document.querySelectorAll('a').forEach(el => {
+            el.addEventListener('mouseenter', () => document.body.classList.add('hover-state'));
+            el.addEventListener('mouseleave', () => document.body.classList.remove('hover-state'));
+        });
+
+        /**
+         * ------------------------------------------------------------------
+         * MODULE 3: WEBGL ATMOSPHERE (SHADERS)
+         * The "Heavy" Balenciaga vibe.
+         * ------------------------------------------------------------------
+         */
+        const canvas = document.getElementById('gl-renderer');
+        const gl = canvas.getContext('webgl');
+
+        if(gl) {
+            // Vertex Shader
+            const vsSource = `
+                attribute vec2 a_position;
+                void main() {
+                    gl_Position = vec4(a_position, 0.0, 1.0);
+                }
+            `;
+
+            // Fragment Shader (Liquid Dark Metal Effect)
+            const fsSource = `
+                precision highp float;
+                uniform vec2 u_resolution;
+                uniform float u_time;
+
+                // Random
+                float random(in vec2 st) {
+                    return fract(sin(dot(st.xy, vec2(12.9898,78.233))) * 43758.5453123);
+                }
+
+                // Noise
+                float noise(in vec2 st) {
+                    vec2 i = floor(st);
+                    vec2 f = fract(st);
+                    float a = random(i);
+                    float b = random(i + vec2(1.0, 0.0));
+                    float c = random(i + vec2(0.0, 1.0));
+                    float d = random(i + vec2(1.0, 1.0));
+                    vec2 u = f * f * (3.0 - 2.0 * f);
+                    return mix(a, b, u.x) + (c - a)* u.y * (1.0 - u.x) + (d - b) * u.x * u.y;
+                }
+
+                // FBM
+                float fbm(in vec2 st) {
+                    float v = 0.0;
+                    float a = 0.5;
+                    for (int i = 0; i < 5; i++) {
+                        v += a * noise(st);
+                        st *= 2.0;
+                        a *= 0.5;
+                    }
+                    return v;
+                }
+
+                void main() {
+                    vec2 st = gl_FragCoord.xy / u_resolution.xy;
+                    st.x *= u_resolution.x / u_resolution.y;
+
+                    // Slow, heavy movement
+                    float t = u_time * 0.1;
+
+                    vec2 q = vec2(0.);
+                    q.x = fbm(st + 0.0 * t);
+                    q.y = fbm(st + vec2(1.0));
+
+                    vec2 r = vec2(0.);
+                    r.x = fbm(st + 1.0 * q + vec2(1.7, 9.2) + 0.15 * t);
+                    r.y = fbm(st + 1.0 * q + vec2(8.3, 2.8) + 0.126 * t);
+
+                    float f = fbm(st + r);
+
+                    // Colors: Obsidian, Charcoal, subtle light
+                    vec3 color = vec3(0.0);
+                    
+                    // Base dark
+                    color = mix(vec3(0.01, 0.01, 0.01), vec3(0.08, 0.08, 0.09), clamp((f*f)*4.0, 0.0, 1.0));
+                    
+                    // Highlights
+                    color = mix(color, vec3(0.15, 0.15, 0.16), clamp(length(q), 0.0, 1.0));
+
+                    // Shadow edges (Vignette)
+                    float dist = distance(st, vec2(0.5 * (u_resolution.x/u_resolution.y), 0.5));
+                    color *= smoothstep(1.2, 0.2, dist);
+
+                    gl_FragColor = vec4(color, 1.0);
+                }
+            `;
+
+            // Compile logic
+            const createShader = (gl, type, src) => {
+                const s = gl.createShader(type);
+                gl.shaderSource(s, src);
+                gl.compileShader(s);
+                if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
+                    console.error(gl.getShaderInfoLog(s));
+                    gl.deleteShader(s);
+                    return null;
+                }
+                return s;
+            };
+
+            const program = gl.createProgram();
+            const vs = createShader(gl, gl.VERTEX_SHADER, vsSource);
+            const fs = createShader(gl, gl.FRAGMENT_SHADER, fsSource);
+            gl.attachShader(program, vs);
+            gl.attachShader(program, fs);
+            gl.linkProgram(program);
+            gl.useProgram(program);
+
+            // Buffer
+            const posBuffer = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, posBuffer);
+            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, -1,1, 1,-1, 1,1]), gl.STATIC_DRAW);
+
+            const aPos = gl.getAttribLocation(program, 'a_position');
+            gl.enableVertexAttribArray(aPos);
+            gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
+
+            // Uniforms
+            const uRes = gl.getUniformLocation(program, 'u_resolution');
+            const uTime = gl.getUniformLocation(program, 'u_time');
+
+            // Render Loop
+            let startTime = Date.now();
+            
+            const render = () => {
+                const w = canvas.width = window.innerWidth;
+                const h = canvas.height = window.innerHeight;
+                gl.viewport(0, 0, w, h);
+                
+                gl.uniform2f(uRes, w, h);
+                gl.uniform1f(uTime, (Date.now() - startTime) * 0.001);
+                
+                gl.drawArrays(gl.TRIANGLES, 0, 6);
+                requestAnimationFrame(render);
+            };
+            render();
         }
-        requestAnimationFrame(render);
+
+        // Init System
+        new VirtualScroll();
+        console.log("SYSTEM: ONLINE");
 
     </script>
 </body>
