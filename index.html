@@ -2,354 +2,287 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>HYPEGA | QRNEX</title>
-    <meta name="description" content="HYPEGA — QRNEX. Music production and creative collective. Under construction.">
-    <meta name="keywords" content="hypega, qrnex, music producer, luxury, experimental">
+    <meta name="description" content="HYPEGA — Under Construction. Music production by QRNEX. Experimental luxury portal.">
+    <meta name="keywords" content="hypega, qrnex, music producer, luxury fashion, experimental design">
+    <link rel="canonical" href="https://hypega.com/">
     
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://hypega.com/">
+    <meta property="og:title" content="HYPEGA | QRNEX">
+    <meta property="og:description" content="Experimental luxury portal for HYPEGA.">
+    
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="HYPEGA | QRNEX">
+    <meta name="twitter:description" content="Experimental luxury portal for HYPEGA.">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "url": "https://hypega.com/",
+      "name": "HYPEGA",
+      "author": {
+        "@type": "Person",
+        "name": "QRNEX",
+        "jobTitle": "Music Producer"
+      }
+    }
+    </script>
+
     <style>
         :root {
-            /* 100k USD Palette: Deep Petrol, Midnight Green, and Rich Aubergine */
-            --bg-base: #040d0e;
-            --bg-deep: #0a0410;
-            --accent-neon: #00ffd5;
-            --accent-glow: #1a3c40;
-            --text-primary: #cbd5d6;
-            --text-dim: #5c7275;
-            --easing: cubic-bezier(0.16, 1, 0.3, 1);
+            --bg-1: #0b0f2e; --bg-2: #1b0b2e; --bg-3: #0a2a2a; --bg-4: #2a0a14;
+            --acc-1: #00ffd5; --acc-2: #7c3aed; --acc-3: #ff2bd6; --acc-4: #ff3d00; --acc-5: #ffd400;
+            --font: system-ui, -apple-system, sans-serif;
+            --ease: cubic-bezier(0.16, 1, 0.3, 1);
+            --chroma: 0px;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-font-smoothing: antialiased;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
 
         body {
-            background-color: var(--bg-base);
-            color: var(--text-primary);
-            font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif;
-            overflow-x: hidden;
+            background: linear-gradient(135deg, var(--bg-1), var(--bg-2), var(--bg-3), var(--bg-4));
+            background-size: 400% 400%;
+            animation: bgShift 20s infinite alternate;
+            color: var(--acc-1);
+            font-family: var(--font);
+            overflow: hidden;
             height: 100vh;
-            width: 100%;
+            width: 100vw;
             cursor: none;
         }
 
-        /* Noise & Bloom Layers */
-        .viewport-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 100;
-            background: radial-gradient(circle at 50% 50%, transparent 0%, rgba(4, 13, 14, 0.4) 100%);
+        @keyframes bgShift { 0% { background-position: 0% 50%; } 100% { background-position: 100% 50%; } }
+
+        /* Cinematic Intro Overlay */
+        #intro {
+            position: fixed; inset: 0; background: var(--bg-1); z-index: 100;
+            display: flex; align-items: center; justify-content: center;
+            transition: transform 1.5s var(--ease);
         }
 
-        /* SVG Film Grain */
-        .grain {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 99;
-            opacity: 0.04;
-            pointer-events: none;
+        /* Ambient Layers */
+        #canvas-stage { position: fixed; inset: 0; z-index: 1; pointer-events: none; opacity: 0.6; }
+        #noise-overlay {
+            position: fixed; inset: 0; z-index: 5; pointer-events: none; opacity: 0.05;
+            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
         }
 
-        /* Liquid Light Canvas */
-        #light-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            background: linear-gradient(135deg, var(--bg-base) 0%, var(--bg-deep) 100%);
+        #spotlight {
+            position: fixed; inset: 0; z-index: 2; pointer-events: none;
+            background: radial-gradient(circle 400px at var(--mx, 50%) var(--my, 50%), rgba(0,255,213,0.15), transparent 80%);
         }
 
-        /* Typography Styling */
-        main {
-            position: relative;
-            z-index: 10;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            padding: 4vw;
-            scroll-snap-type: y mandatory;
-            overflow-y: auto;
-            scrollbar-width: none;
-        }
-
-        main::-webkit-scrollbar { display: none; }
+        /* Scenes */
+        main { position: relative; width: 100%; height: 100%; z-index: 10; }
 
         section {
-            min-height: 92vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            scroll-snap-align: start;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 2s var(--easing), transform 2s var(--easing);
+            position: absolute; inset: 0; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; text-align: center;
         }
 
-        section.visible {
-            opacity: 1;
-            transform: translateY(0);
+        #scene-2 {
+            z-index: 11; background: inherit;
+            clip-path: inset(100% 0 0 0);
+            transition: clip-path 1.2s var(--ease);
         }
 
-        /* Hypega Section */
-        h1 {
-            font-size: clamp(4rem, 15vw, 12rem);
-            font-weight: 800;
-            letter-spacing: -0.04em;
-            line-height: 0.8;
-            text-transform: uppercase;
-            margin-bottom: 1rem;
-            color: var(--text-primary);
-            mix-blend-mode: screen;
+        .content-box {
+            display: flex; flex-direction: column; align-items: center; gap: 1rem;
+            text-transform: uppercase; letter-spacing: -0.05em;
         }
 
-        .status {
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.4em;
-            color: var(--text-dim);
-            margin-left: 0.5vw;
+        h1, h2 {
+            font-size: clamp(4rem, 18vw, 22rem); font-weight: 900; line-height: 0.8;
+            text-shadow: calc(var(--chroma) * -1) 0 var(--acc-3), var(--chroma) 0 var(--acc-1);
+            transition: text-shadow 0.1s linear;
         }
 
-        /* Qrnex Section */
-        .qrnex-wrap {
-            align-items: flex-end;
-            text-align: right;
+        h1 { filter: url(#distortion); transition: filter 0.3s; }
+        h1:hover { filter: url(#distortion-active); }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            padding: 0.8rem 1.5rem;
+            border-radius: 2px;
+            font-size: 0.7rem; letter-spacing: 0.4em; font-weight: 500;
+            margin-top: -1rem; color: var(--acc-1);
         }
 
-        h2 {
-            font-size: clamp(3rem, 10vw, 8rem);
-            font-weight: 300;
-            letter-spacing: -0.02em;
-            text-transform: lowercase;
-            color: var(--accent-neon);
-            text-shadow: 0 0 40px rgba(0, 255, 213, 0.2);
+        .magnetic {
+            display: inline-block; text-decoration: none; color: inherit;
+            padding: 2rem; margin-top: 2rem; transition: transform 0.2s linear;
         }
 
-        .subtitle {
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5em;
-            color: var(--text-dim);
-            margin-top: 1rem;
+        .link-text {
+            font-size: 0.65rem; letter-spacing: 0.3em; opacity: 0.7;
+            position: relative; padding-bottom: 5px;
         }
 
-        /* Links */
-        .social-link {
-            display: inline-block;
-            margin-top: 3rem;
-            color: var(--text-primary);
-            text-decoration: none;
-            font-size: 0.7rem;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            padding: 1rem 0;
-            position: relative;
-            transition: color 0.4s var(--easing);
+        .link-text::after {
+            content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 1px;
+            background: var(--acc-1); transform: scaleX(0); transform-origin: right;
+            transition: transform 0.6s var(--ease);
         }
 
-        .social-link::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 1px;
-            background: var(--text-dim);
-            transform: scaleX(0);
-            transform-origin: right;
-            transition: transform 0.6s var(--easing);
+        .magnetic:hover .link-text::after { transform: scaleX(1); transform-origin: left; }
+        .magnetic:hover .link-text { opacity: 1; }
+
+        #cursor-dot {
+            position: fixed; width: 8px; height: 8px; background: var(--acc-1);
+            border-radius: 50%; pointer-events: none; z-index: 999;
+            transform: translate(-50%, -50%); transition: width 0.3s, height 0.3s, background 0.3s;
         }
 
-        .social-link:hover::after {
-            transform: scaleX(1);
-            transform-origin: left;
-        }
-
-        .social-link:hover {
-            color: var(--accent-neon);
-        }
-
-        /* Custom Cursor */
-        #cursor {
-            position: fixed;
-            width: 8px;
-            height: 8px;
-            background: var(--accent-neon);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 1000;
-            mix-blend-mode: difference;
-            transition: transform 0.3s var(--easing);
-        }
-
-        #cursor-follower {
-            position: fixed;
-            width: 40px;
-            height: 40px;
-            border: 1px solid rgba(0, 255, 213, 0.3);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 999;
-            transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-        }
-
-        @media (prefers-reduced-motion) {
-            section, #cursor, #cursor-follower {
-                transition: none !important;
-                transform: none !important;
-            }
-        }
-
-        @media (max-width: 768px) {
-            body { cursor: auto; }
-            #cursor, #cursor-follower { display: none; }
-            h1 { font-size: 5rem; }
-            h2 { font-size: 4rem; }
+        @media (prefers-reduced-motion: reduce) {
+            * { animation: none !important; transition: none !important; }
+            #canvas-stage, #noise-overlay { display: none; }
         }
     </style>
 </head>
 <body>
 
-    <div id="cursor"></div>
-    <div id="cursor-follower"></div>
-
-    <svg class="grain">
-        <filter id="noise">
-            <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch" />
-            <feColorMatrix type="saturate" values="0" />
+    <svg style="display:none">
+        <filter id="distortion">
+            <feTurbulence type="fractalNoise" baseFrequency="0.01" numOctaves="1" result="warp" />
+            <feDisplacementMap in="SourceGraphic" in2="warp" scale="0" />
         </filter>
-        <rect width="100%" height="100%" filter="url(#noise)" />
+        <filter id="distortion-active">
+            <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="2" result="warp" />
+            <feDisplacementMap in="SourceGraphic" in2="warp" scale="25" />
+        </filter>
     </svg>
 
-    <div class="viewport-overlay"></div>
-    <canvas id="light-canvas"></canvas>
+    <div id="intro"></div>
+    <div id="cursor-dot"></div>
+    <div id="noise-overlay"></div>
+    <div id="spotlight"></div>
+    <canvas id="canvas-stage"></canvas>
 
-    <main>
-        <section id="hypega" class="visible">
-            <div class="reveal">
-                <h1>hypega</h1>
-                <p class="status">under construction</p>
-                <a href="https://instagram.com/hypega" class="social-link" target="_blank">instagram.com/hypega</a>
+    <main id="main">
+        <section id="scene-1">
+            <div class="content-box">
+                <h1 id="hypega-text">hypega</h1>
+                <div class="glass-panel">under construction</div>
+                <a href="https://instagram.com/hypega" class="magnetic" target="_blank">
+                    <span class="link-text">instagram.com/hypega</span>
+                </a>
             </div>
         </section>
 
-        <section id="qrnex" class="qrnex-wrap">
-            <div class="reveal">
+        <section id="scene-2">
+            <div class="content-box">
                 <h2>qrnex</h2>
-                <p class="subtitle">music producer</p>
-                <a href="https://instagram.com/qrnex" class="social-link" target="_blank">instagram.com/qrnex</a>
+                <div class="glass-panel">music producer</div>
+                <a href="https://instagram.com/qrnex" class="magnetic" target="_blank">
+                    <span class="link-text">instagram.com/qrnex</span>
+                </a>
             </div>
         </section>
     </main>
 
     <script>
-        // Liquid Light Signature Interaction
-        const canvas = document.getElementById('light-canvas');
+        const canvas = document.getElementById('canvas-stage');
         const ctx = canvas.getContext('2d');
-        let width, height;
-        let mouse = { x: 0, y: 0, active: false };
-        let lerpMouse = { x: 0, y: 0 };
+        let width, height, particles = [], bars = [];
+        const accents = ['#00ffd5', '#7c3aed', '#ff2bd6', '#ff3d00', '#ffd400'];
 
-        const resize = () => {
+        function init() {
             width = canvas.width = window.innerWidth;
             height = canvas.height = window.innerHeight;
+            particles = Array.from({length: 80}, () => ({
+                x: Math.random() * width, y: Math.random() * height,
+                vx: (Math.random() - 0.5) * 0.5, vy: (Math.random() - 0.5) * 0.5,
+                s: Math.random() * 1.5
+            }));
+            bars = Array.from({length: 4}, () => ({
+                x: Math.random() * width, w: 50 + Math.random() * 150,
+                c: accents[Math.floor(Math.random() * accents.length)],
+                o: Math.random() * 0.3, t: Math.random() * 100
+            }));
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, width, height);
+            ctx.filter = 'blur(100px)';
+            bars.forEach(b => {
+                b.t += 0.005;
+                let drawX = b.x + Math.sin(b.t) * 200;
+                ctx.fillStyle = b.c;
+                ctx.globalAlpha = b.o;
+                ctx.fillRect(drawX, -height, b.w, height * 3);
+            });
+            ctx.filter = 'none';
+            ctx.globalAlpha = 1;
+            ctx.fillStyle = '#00ffd5';
+            particles.forEach(p => {
+                p.x += p.vx; p.y += p.vy;
+                if(p.x < 0 || p.x > width) p.vx *= -1;
+                if(p.y < 0 || p.y > height) p.vy *= -1;
+                ctx.beginPath(); ctx.arc(p.x, p.y, p.s, 0, Math.PI*2); ctx.fill();
+            });
+            requestAnimationFrame(draw);
+        }
+
+        init(); draw();
+        window.onresize = init;
+
+        // Intro & Reveal
+        window.onload = () => {
+            setTimeout(() => {
+                document.getElementById('intro').style.transform = 'translateY(-100%)';
+            }, 500);
         };
 
-        window.addEventListener('resize', resize);
-        resize();
-
-        window.addEventListener('mousemove', (e) => {
-            mouse.x = e.clientX;
-            mouse.y = e.clientY;
-            mouse.active = true;
-
-            // Update custom cursor
-            const cursor = document.getElementById('cursor');
-            const follower = document.getElementById('cursor-follower');
-            cursor.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
-            follower.style.transform = `translate3d(${e.clientX - 20}px, ${e.clientY - 20}px, 0)`;
+        // Scroll Reveal Wipe
+        let scrollY = 0;
+        window.addEventListener('wheel', (e) => {
+            scrollY += e.deltaY;
+            scrollY = Math.min(Math.max(scrollY, 0), 1000);
+            const p = 100 - (scrollY / 10);
+            document.getElementById('scene-2').style.clipPath = `inset(${p}% 0 0 0)`;
+            
+            // Chroma Aberration logic
+            const root = document.documentElement;
+            const chromaVal = Math.abs(e.deltaY) * 0.05;
+            root.style.setProperty('--chroma', `${chromaVal}px`);
+            setTimeout(() => root.style.setProperty('--chroma', '0px'), 150);
         });
 
-        const render = () => {
-            // Smooth mouse follow for the light
-            lerpMouse.x += (mouse.x - lerpMouse.x) * 0.05;
-            lerpMouse.y += (mouse.y - lerpMouse.y) * 0.05;
+        // Mouse & Magnetic Interaction
+        const cursor = document.getElementById('cursor-dot');
+        const spotlight = document.getElementById('spotlight');
+        const root = document.documentElement;
 
-            ctx.clearRect(0, 0, width, height);
+        window.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            root.style.setProperty('--mx', (e.clientX / window.innerWidth * 100) + '%');
+            root.style.setProperty('--my', (e.clientY / window.innerHeight * 100) + '%');
 
-            // Base Background Gradient
-            const bgGrad = ctx.createLinearGradient(0, 0, width, height);
-            bgGrad.addColorStop(0, '#040d0e');
-            bgGrad.addColorStop(1, '#0a0410');
-            ctx.fillStyle = bgGrad;
-            ctx.fillRect(0, 0, width, height);
+            document.querySelectorAll('.magnetic').forEach(el => {
+                const rect = el.getBoundingClientRect();
+                const centerX = rect.left + rect.width / 2;
+                const centerY = rect.top + rect.height / 2;
+                const distX = e.clientX - centerX;
+                const distY = e.clientY - centerY;
+                const dist = Math.hypot(distX, distY);
 
-            // Ambient Fixed Light (Top Left)
-            const ambient = ctx.createRadialGradient(width * 0.2, height * 0.2, 0, width * 0.2, height * 0.2, width * 0.8);
-            ambient.addColorStop(0, 'rgba(26, 60, 64, 0.3)');
-            ambient.addColorStop(1, 'rgba(10, 4, 16, 0)');
-            ctx.fillStyle = ambient;
-            ctx.fillRect(0, 0, width, height);
-
-            // Interactive Liquid Light
-            if (mouse.active) {
-                const liquidLight = ctx.createRadialGradient(
-                    lerpMouse.x, lerpMouse.y, 0,
-                    lerpMouse.x, lerpMouse.y, width * 0.4
-                );
-                liquidLight.addColorStop(0, 'rgba(0, 255, 213, 0.07)');
-                liquidLight.addColorStop(0.5, 'rgba(26, 60, 64, 0.03)');
-                liquidLight.addColorStop(1, 'rgba(4, 13, 14, 0)');
-                
-                ctx.globalCompositeOperation = 'screen';
-                ctx.fillStyle = liquidLight;
-                ctx.fillRect(0, 0, width, height);
-                ctx.globalCompositeOperation = 'source-over';
-            }
-
-            requestAnimationFrame(render);
-        };
-
-        render();
-
-        // Staggered Reveal on Scroll
-        const sections = document.querySelectorAll('section');
-        const observerOptions = {
-            threshold: 0.4
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
+                if (dist < 100) {
+                    el.style.transform = `translate(${distX * 0.3}px, ${distY * 0.3}px)`;
+                    cursor.style.width = '40px';
+                    cursor.style.height = '40px';
+                    cursor.style.background = 'rgba(0,255,213,0.2)';
+                } else {
+                    el.style.transform = `translate(0,0)`;
+                    cursor.style.width = '8px';
+                    cursor.style.height = '8px';
+                    cursor.style.background = '#00ffd5';
                 }
             });
-        }, observerOptions);
-
-        sections.forEach(section => observer.observe(section));
-
-        // Subtle Parallax for Text
-        window.addEventListener('scroll', () => {
-            const scrolled = window.scrollY;
-            const h1 = document.querySelector('h1');
-            const h2 = document.querySelector('h2');
-            
-            if (h1) h1.style.transform = `translate3d(0, ${scrolled * 0.1}px, 0)`;
-            if (h2) h2.style.transform = `translate3d(0, ${-(scrolled - height) * 0.05}px, 0)`;
         });
     </script>
 </body>
