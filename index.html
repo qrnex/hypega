@@ -2,288 +2,442 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>HYPEGA | QRNEX</title>
-    <meta name="description" content="HYPEGA — Under Construction. Music production by QRNEX. Experimental luxury portal.">
-    <meta name="keywords" content="hypega, qrnex, music producer, luxury fashion, experimental design">
-    <link rel="canonical" href="https://hypega.com/">
-    
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://hypega.com/">
-    <meta property="og:title" content="HYPEGA | QRNEX">
-    <meta property="og:description" content="Experimental luxury portal for HYPEGA.">
-    
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="HYPEGA | QRNEX">
-    <meta name="twitter:description" content="Experimental luxury portal for HYPEGA.">
-
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      "url": "https://hypega.com/",
-      "name": "HYPEGA",
-      "author": {
-        "@type": "Person",
-        "name": "QRNEX",
-        "jobTitle": "Music Producer"
-      }
-    }
-    </script>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HYPEGA x QRNEX | Production</title>
     <style>
+        /* --- CORE CONFIGURATION & VARIABLES --- */
         :root {
-            --bg-1: #0b0f2e; --bg-2: #1b0b2e; --bg-3: #0a2a2a; --bg-4: #2a0a14;
-            --acc-1: #00ffd5; --acc-2: #7c3aed; --acc-3: #ff2bd6; --acc-4: #ff3d00; --acc-5: #ffd400;
-            --font: system-ui, -apple-system, sans-serif;
-            --ease: cubic-bezier(0.16, 1, 0.3, 1);
-            --chroma: 0px;
+            --bg-deep: #050208;
+            --text-color: #ffffff;
+            --glare-color: rgba(255, 255, 255, 0.8);
+            --ease-cinematic: cubic-bezier(0.77, 0, 0.175, 1);
+            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+            --transition-speed: 1.4s;
+            --hypega-glow: rgba(255, 255, 255, 0.4);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-        body {
-            background: linear-gradient(135deg, var(--bg-1), var(--bg-2), var(--bg-3), var(--bg-4));
-            background-size: 400% 400%;
-            animation: bgShift 20s infinite alternate;
-            color: var(--acc-1);
-            font-family: var(--font);
+        body, html {
+            width: 100%;
+            height: 100%;
             overflow: hidden;
-            height: 100vh;
+            background-color: var(--bg-deep);
+            font-family: 'Segoe UI', Roboto, -apple-system, sans-serif;
+            color: var(--text-color);
+        }
+
+        /* --- GLOBAL BACKGROUND LAYER --- */
+        #global-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* --- SCENE SCENARIO LAYOUT --- */
+        .main-wrapper {
+            position: relative;
             width: 100vw;
-            cursor: none;
+            height: 100vh;
         }
 
-        @keyframes bgShift { 0% { background-position: 0% 50%; } 100% { background-position: 100% 50%; } }
-
-        /* Cinematic Intro Overlay */
-        #intro {
-            position: fixed; inset: 0; background: var(--bg-1); z-index: 100;
-            display: flex; align-items: center; justify-content: center;
-            transition: transform 1.5s var(--ease);
+        .scene {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
         }
 
-        /* Ambient Layers */
-        #canvas-stage { position: fixed; inset: 0; z-index: 1; pointer-events: none; opacity: 0.6; }
-        #noise-overlay {
-            position: fixed; inset: 0; z-index: 5; pointer-events: none; opacity: 0.05;
-            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        /* --- SCENE 1: HYPEGA HERO (TOP LAYER) --- */
+        #scene-hypega {
+            z-index: 10;
+            background: radial-gradient(circle, transparent 20%, rgba(5,5,5,0.4) 100%);
+            clip-path: circle(100% at 50% 50%);
+            transition: clip-path var(--transition-speed) var(--ease-cinematic);
         }
 
-        #spotlight {
-            position: fixed; inset: 0; z-index: 2; pointer-events: none;
-            background: radial-gradient(circle 400px at var(--mx, 50%) var(--my, 50%), rgba(0,255,213,0.15), transparent 80%);
+        #scene-hypega.is-hidden {
+            clip-path: circle(0% at 50% 50%);
         }
 
-        /* Scenes */
-        main { position: relative; width: 100%; height: 100%; z-index: 10; }
-
-        section {
-            position: absolute; inset: 0; display: flex; flex-direction: column;
-            align-items: center; justify-content: center; text-align: center;
+        .hypega-container {
+            position: relative;
+            text-align: center;
+            z-index: 11;
         }
 
-        #scene-2 {
-            z-index: 11; background: inherit;
-            clip-path: inset(100% 0 0 0);
-            transition: clip-path 1.2s var(--ease);
+        /* Cinematic Intro Components */
+        .shutter {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, transparent 20%, var(--bg-deep) 70%);
+            pointer-events: none;
+            z-index: 15;
+            animation: shutterFade 2.2s var(--ease-out-expo) forwards;
         }
 
-        .content-box {
-            display: flex; flex-direction: column; align-items: center; gap: 1rem;
-            text-transform: uppercase; letter-spacing: -0.05em;
+        .title-wrapper {
+            opacity: 0;
+            transform: scale(0.92);
+            animation: 
+                revealWrapper 2.2s var(--ease-out-expo) forwards,
+                cameraZoom 2.2s linear forwards;
         }
 
-        h1, h2 {
-            font-size: clamp(4rem, 18vw, 22rem); font-weight: 900; line-height: 0.8;
-            text-shadow: calc(var(--chroma) * -1) 0 var(--acc-3), var(--chroma) 0 var(--acc-1);
-            transition: text-shadow 0.1s linear;
+        .hypega-title {
+            font-size: 10vw;
+            font-weight: 900;
+            letter-spacing: 1.5rem;
+            text-transform: uppercase;
+            position: relative;
+            color: var(--text-color);
+            /* Gradient Shine */
+            background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 50%, rgba(255,255,255,0) 100%);
+            background-size: 200% auto;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: 
+                shine 2.2s var(--ease-out-expo) forwards,
+                breathe 4s ease-in-out infinite 2.2s;
         }
 
-        h1 { filter: url(#distortion); transition: filter 0.3s; }
-        h1:hover { filter: url(#distortion-active); }
-
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(20px);
-            padding: 0.8rem 1.5rem;
-            border-radius: 2px;
-            font-size: 0.7rem; letter-spacing: 0.4em; font-weight: 500;
-            margin-top: -1rem; color: var(--acc-1);
+        /* Interaction Canvas */
+        #effectCanvas {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 20;
         }
 
-        .magnetic {
-            display: inline-block; text-decoration: none; color: inherit;
-            padding: 2rem; margin-top: 2rem; transition: transform 0.2s linear;
+        /* --- SCENE 2: QRNEX (BOTTOM LAYER) --- */
+        #scene-qrnex {
+            z-index: 5;
+            background: radial-gradient(circle at 50% 50%, #1a1a1a 0%, #050505 100%);
         }
 
-        .link-text {
-            font-size: 0.65rem; letter-spacing: 0.3em; opacity: 0.7;
-            position: relative; padding-bottom: 5px;
+        .qrnex-content {
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 0.5em;
+            z-index: 6;
         }
 
-        .link-text::after {
-            content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 1px;
-            background: var(--acc-1); transform: scaleX(0); transform-origin: right;
-            transition: transform 0.6s var(--ease);
+        .qrnex-title {
+            font-size: 5rem;
+            font-weight: 200;
+            margin-bottom: 0.5rem;
+            position: relative;
+            display: inline-block;
         }
 
-        .magnetic:hover .link-text::after { transform: scaleX(1); transform-origin: left; }
-        .magnetic:hover .link-text { opacity: 1; }
-
-        #cursor-dot {
-            position: fixed; width: 8px; height: 8px; background: var(--acc-1);
-            border-radius: 50%; pointer-events: none; z-index: 999;
-            transform: translate(-50%, -50%); transition: width 0.3s, height 0.3s, background 0.3s;
+        .qrnex-subtitle {
+            font-size: 0.9rem;
+            font-weight: 400;
+            letter-spacing: 1.2em;
+            color: #888;
+            opacity: 0;
+            transform: translateY(10px);
         }
 
-        @media (prefers-reduced-motion: reduce) {
-            * { animation: none !important; transition: none !important; }
-            #canvas-stage, #noise-overlay { display: none; }
+        .qrnex-subtitle.animate {
+            animation: fadeInUp 1.5s ease forwards 0.5s;
+        }
+
+        .char {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(20px) rotateX(-90deg);
+            transition: all 0.8s cubic-bezier(0.2, 0.5, 0.2, 1);
+        }
+
+        .char.reveal {
+            opacity: 1;
+            transform: translateY(0) rotateX(0);
+        }
+
+        .light-beam {
+            position: absolute;
+            width: 150vw;
+            height: 150vh;
+            top: -25%;
+            left: -25%;
+            background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(60, 60, 70, 0.3) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        /* --- UI ELEMENTS --- */
+        .instruction {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            opacity: 0.4;
+            z-index: 100;
+            letter-spacing: 3px;
+            font-size: 10px;
+            text-transform: uppercase;
+            pointer-events: none;
+            animation: pulse 2s infinite;
+        }
+
+        /* --- ANIMATION KEYFRAMES --- */
+        @keyframes revealWrapper { 0% { opacity: 0; } 20% { opacity: 1; } 100% { opacity: 1; } }
+        @keyframes cameraZoom { 0% { transform: scale(0.92); } 100% { transform: scale(1.05); } }
+        @keyframes shine { 0% { background-position: -200% center; } 100% { background-position: 200% center; } }
+        @keyframes shutterFade { 0% { opacity: 1; transform: scale(1); } 100% { opacity: 0.4; transform: scale(1.5); } }
+        @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+        @keyframes pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.6; } }
+        @keyframes breathe {
+            0%, 100% { filter: drop-shadow(0 0 5px var(--hypega-glow)); opacity: 0.95; }
+            50% { filter: drop-shadow(0 0 25px var(--hypega-glow)); opacity: 1; }
+        }
+
+        @media (max-width: 768px) {
+            .hypega-title { font-size: 15vw; letter-spacing: 0.5rem; }
+            .qrnex-title { font-size: 3rem; }
         }
     </style>
 </head>
 <body>
 
-    <svg style="display:none">
-        <filter id="distortion">
-            <feTurbulence type="fractalNoise" baseFrequency="0.01" numOctaves="1" result="warp" />
-            <feDisplacementMap in="SourceGraphic" in2="warp" scale="0" />
-        </filter>
-        <filter id="distortion-active">
-            <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="2" result="warp" />
-            <feDisplacementMap in="SourceGraphic" in2="warp" scale="25" />
-        </filter>
-    </svg>
+    <canvas id="global-bg"></canvas>
+    
+    <div class="instruction">Scroll or Click to Switch Scene</div>
 
-    <div id="intro"></div>
-    <div id="cursor-dot"></div>
-    <div id="noise-overlay"></div>
-    <div id="spotlight"></div>
-    <canvas id="canvas-stage"></canvas>
-
-    <main id="main">
-        <section id="scene-1">
-            <div class="content-box">
-                <h1 id="hypega-text">hypega</h1>
-                <div class="glass-panel">under construction</div>
-                <a href="https://instagram.com/hypega" class="magnetic" target="_blank">
-                    <span class="link-text">instagram.com/hypega</span>
-                </a>
+    <div class="main-wrapper" id="master-container">
+        
+        <section class="scene" id="scene-hypega">
+            <div class="shutter"></div>
+            <div class="hypega-container">
+                <div class="title-wrapper">
+                    <h1 class="hypega-title" id="textTarget">HYPEGA</h1>
+                </div>
+                <canvas id="effectCanvas"></canvas>
             </div>
         </section>
 
-        <section id="scene-2">
-            <div class="content-box">
-                <h2>qrnex</h2>
-                <div class="glass-panel">music producer</div>
-                <a href="https://instagram.com/qrnex" class="magnetic" target="_blank">
-                    <span class="link-text">instagram.com/qrnex</span>
-                </a>
+        <section class="scene" id="scene-qrnex">
+            <div class="light-beam" id="beam"></div>
+            <div class="qrnex-content">
+                <h1 class="qrnex-title" id="qrnex-text">QRNEX</h1>
+                <p class="qrnex-subtitle" id="qrnex-sub">music producer</p>
             </div>
         </section>
-    </main>
+
+    </div>
 
     <script>
-        const canvas = document.getElementById('canvas-stage');
-        const ctx = canvas.getContext('2d');
-        let width, height, particles = [], bars = [];
-        const accents = ['#00ffd5', '#7c3aed', '#ff2bd6', '#ff3d00', '#ffd400'];
-
-        function init() {
-            width = canvas.width = window.innerWidth;
-            height = canvas.height = window.innerHeight;
-            particles = Array.from({length: 80}, () => ({
-                x: Math.random() * width, y: Math.random() * height,
-                vx: (Math.random() - 0.5) * 0.5, vy: (Math.random() - 0.5) * 0.5,
-                s: Math.random() * 1.5
-            }));
-            bars = Array.from({length: 4}, () => ({
-                x: Math.random() * width, w: 50 + Math.random() * 150,
-                c: accents[Math.floor(Math.random() * accents.length)],
-                o: Math.random() * 0.3, t: Math.random() * 100
-            }));
-        }
-
-        function draw() {
-            ctx.clearRect(0, 0, width, height);
-            ctx.filter = 'blur(100px)';
-            bars.forEach(b => {
-                b.t += 0.005;
-                let drawX = b.x + Math.sin(b.t) * 200;
-                ctx.fillStyle = b.c;
-                ctx.globalAlpha = b.o;
-                ctx.fillRect(drawX, -height, b.w, height * 3);
-            });
-            ctx.filter = 'none';
-            ctx.globalAlpha = 1;
-            ctx.fillStyle = '#00ffd5';
-            particles.forEach(p => {
-                p.x += p.vx; p.y += p.vy;
-                if(p.x < 0 || p.x > width) p.vx *= -1;
-                if(p.y < 0 || p.y > height) p.vy *= -1;
-                ctx.beginPath(); ctx.arc(p.x, p.y, p.s, 0, Math.PI*2); ctx.fill();
-            });
-            requestAnimationFrame(draw);
-        }
-
-        init(); draw();
-        window.onresize = init;
-
-        // Intro & Reveal
-        window.onload = () => {
-            setTimeout(() => {
-                document.getElementById('intro').style.transform = 'translateY(-100%)';
-            }, 500);
+        /**
+         * 1. VOLUMETRIC BACKGROUND LOGIC
+         */
+        const bgCanvas = document.getElementById('global-bg');
+        const bgCtx = bgCanvas.getContext('2d', { alpha: false });
+        let bW, bH;
+        let streaks = [], particles = [];
+        const CONFIG = {
+            streakCount: 12,
+            particleCount: 60,
+            colors: { bg: ['#050208', '#0a0a2e'], accents: ['#ff00ff', '#00ffff'] }
         };
 
-        // Scroll Reveal Wipe
-        let scrollY = 0;
-        window.addEventListener('wheel', (e) => {
-            scrollY += e.deltaY;
-            scrollY = Math.min(Math.max(scrollY, 0), 1000);
-            const p = 100 - (scrollY / 10);
-            document.getElementById('scene-2').style.clipPath = `inset(${p}% 0 0 0)`;
-            
-            // Chroma Aberration logic
-            const root = document.documentElement;
-            const chromaVal = Math.abs(e.deltaY) * 0.05;
-            root.style.setProperty('--chroma', `${chromaVal}px`);
-            setTimeout(() => root.style.setProperty('--chroma', '0px'), 150);
+        class Particle {
+            constructor() { this.reset(); }
+            reset() {
+                this.x = Math.random() * bW;
+                this.y = Math.random() * bH;
+                this.vx = (Math.random() - 0.5) * 0.4;
+                this.vy = -(Math.random() * 0.3 + 0.2);
+                this.size = Math.random() * 1.5 + 0.5;
+                this.alpha = Math.random() * 0.5 + 0.1;
+            }
+            update() {
+                this.x += this.vx; this.y += this.vy;
+                if (this.y < -10) this.reset();
+            }
+            draw() {
+                bgCtx.fillStyle = `rgba(200, 255, 255, ${this.alpha})`;
+                bgCtx.beginPath(); bgCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2); bgCtx.fill();
+            }
+        }
+
+        class LightStreak {
+            constructor() { this.init(); }
+            init() {
+                this.w = Math.random() * 300 + 100;
+                this.h = bH * 1.5;
+                this.x = Math.random() * bW * 1.5 - bW * 0.5;
+                this.y = Math.random() * -bH * 0.5;
+                this.angle = (Math.random() * 25 + 20) * Math.PI / 180;
+                this.speed = Math.random() * 0.5 + 0.2;
+                this.color = Math.random() > 0.5 ? CONFIG.colors.accents[0] : CONFIG.colors.accents[1];
+                this.opacity = Math.random() * 0.05 + 0.02;
+            }
+            update() {
+                this.x += Math.cos(this.angle) * this.speed;
+                this.y += Math.sin(this.angle) * this.speed;
+                if (this.y > bH) this.init();
+            }
+            draw() {
+                bgCtx.save();
+                bgCtx.translate(this.x, this.y); bgCtx.rotate(this.angle);
+                const grad = bgCtx.createLinearGradient(0, 0, this.w, 0);
+                grad.addColorStop(0, 'transparent');
+                grad.addColorStop(0.5, this.color + Math.floor(this.opacity * 255).toString(16).padStart(2, '0'));
+                grad.addColorStop(1, 'transparent');
+                bgCtx.fillStyle = grad;
+                bgCtx.globalCompositeOperation = 'lighter';
+                bgCtx.fillRect(0, 0, this.w, this.h);
+                bgCtx.restore();
+            }
+        }
+
+        /**
+         * 2. HYPEGA INTERACTION LOGIC (RGB SPLIT)
+         */
+        const hypegaCanvas = document.getElementById('effectCanvas');
+        const hCtx = hypegaCanvas.getContext('2d', { alpha: true });
+        const textTarget = document.getElementById('textTarget');
+        let mouse = { x: 0, y: 0, active: false, lastX: 0, lastY: 0 };
+        let velocity = { x: 0, y: 0 };
+
+        function initHypegaCanvas() {
+            const rect = textTarget.getBoundingClientRect();
+            hypegaCanvas.width = rect.width * 2;
+            hypegaCanvas.height = rect.height * 2;
+        }
+
+        /**
+         * 3. QRNEX REVEAL LOGIC
+         */
+        const qrnexText = document.getElementById('qrnex-text');
+        const qrnexSub = document.getElementById('qrnex-sub');
+        const qContent = qrnexText.innerText;
+        qrnexText.innerText = '';
+        [...qContent].forEach((c, i) => {
+            const span = document.createElement('span');
+            span.innerText = c === ' ' ? '\u00A0' : c;
+            span.classList.add('char');
+            span.style.transitionDelay = `${i * 0.1}s`;
+            qrnexText.appendChild(span);
         });
 
-        // Mouse & Magnetic Interaction
-        const cursor = document.getElementById('cursor-dot');
-        const spotlight = document.getElementById('spotlight');
-        const root = document.documentElement;
+        function triggerQrnexReveal() {
+            document.querySelectorAll('.char').forEach(s => s.classList.add('reveal'));
+            qrnexSub.classList.add('animate');
+        }
 
+        /**
+         * 4. COORDINATION & EVENTS
+         */
+        function resize() {
+            bW = bgCanvas.width = window.innerWidth;
+            bH = bgCanvas.height = window.innerHeight;
+            streaks = []; particles = [];
+            for (let i = 0; i < CONFIG.streakCount; i++) streaks.push(new LightStreak());
+            for (let i = 0; i < CONFIG.particleCount; i++) particles.push(new Particle());
+            initHypegaCanvas();
+        }
+
+        window.addEventListener('resize', resize);
+        
+        // Unified Mouse Tracking
+        const beam = document.getElementById('beam');
         window.addEventListener('mousemove', (e) => {
-            cursor.style.left = e.clientX + 'px';
-            cursor.style.top = e.clientY + 'px';
-            root.style.setProperty('--mx', (e.clientX / window.innerWidth * 100) + '%');
-            root.style.setProperty('--my', (e.clientY / window.innerHeight * 100) + '%');
+            mouse.active = true;
+            mouse.x = e.clientX; mouse.y = e.clientY;
+            velocity.x = mouse.x - mouse.lastX;
+            velocity.y = mouse.y - mouse.lastY;
+            mouse.lastX = mouse.x; mouse.lastY = mouse.y;
 
-            document.querySelectorAll('.magnetic').forEach(el => {
-                const rect = el.getBoundingClientRect();
-                const centerX = rect.left + rect.width / 2;
-                const centerY = rect.top + rect.height / 2;
-                const distX = e.clientX - centerX;
-                const distY = e.clientY - centerY;
-                const dist = Math.hypot(distX, distY);
-
-                if (dist < 100) {
-                    el.style.transform = `translate(${distX * 0.3}px, ${distY * 0.3}px)`;
-                    cursor.style.width = '40px';
-                    cursor.style.height = '40px';
-                    cursor.style.background = 'rgba(0,255,213,0.2)';
-                } else {
-                    el.style.transform = `translate(0,0)`;
-                    cursor.style.width = '8px';
-                    cursor.style.height = '8px';
-                    cursor.style.background = '#00ffd5';
-                }
-            });
+            // Update Qrnex Beam
+            const bx = (e.clientX / window.innerWidth) * 100;
+            const by = (e.clientY / window.innerHeight) * 100;
+            beam.style.setProperty('--x', `${bx}%`);
+            beam.style.setProperty('--y', `${by}%`);
         });
+
+        // Scene Transition Logic
+        const scene1 = document.getElementById('scene-hypega');
+        let isTransitioned = false;
+
+        const toggleScene = () => {
+            isTransitioned = !isTransitioned;
+            if (isTransitioned) {
+                scene1.classList.add('is-hidden');
+                setTimeout(triggerQrnexReveal, 500);
+            } else {
+                scene1.classList.remove('is-hidden');
+            }
+        };
+
+        window.addEventListener('click', toggleScene);
+        window.addEventListener('wheel', (e) => {
+            if (e.deltaY > 50 && !isTransitioned) toggleScene();
+            else if (e.deltaY < -50 && isTransitioned) toggleScene();
+        });
+
+        /**
+         * 5. MASTER RENDER LOOP
+         */
+        function animate() {
+            // Background Render
+            bgCtx.fillStyle = bgCtx.createRadialGradient(bW/2, bH/2, 0, bW/2, bH/2, bW);
+            bgCtx.fillStyle.addColorStop(0, CONFIG.colors.bg[1]);
+            bgCtx.fillStyle.addColorStop(1, CONFIG.colors.bg[0]);
+            bgCtx.fillRect(0, 0, bW, bH);
+            
+            streaks.forEach(s => { s.update(); s.draw(); });
+            particles.forEach(p => { p.update(); p.draw(); });
+
+            // Hypega Effect Render
+            if (!isTransitioned) {
+                hCtx.clearRect(0, 0, hypegaCanvas.width, hypegaCanvas.height);
+                velocity.x *= 0.95; velocity.y *= 0.95;
+                const shiftX = velocity.x * 0.2;
+                const shiftY = velocity.y * 0.2;
+                const centerX = hypegaCanvas.width / 2;
+                const centerY = hypegaCanvas.height / 2;
+
+                hCtx.font = window.getComputedStyle(textTarget).font;
+                hCtx.textAlign = "center";
+                hCtx.textBaseline = "middle";
+                hCtx.letterSpacing = "1.5rem";
+
+                hCtx.globalCompositeOperation = "screen";
+                hCtx.fillStyle = "rgba(255, 0, 0, 0.2)";
+                hCtx.fillText("HYPEGA", centerX + shiftX, centerY + shiftY);
+                hCtx.fillStyle = "rgba(0, 255, 255, 0.2)";
+                hCtx.fillText("HYPEGA", centerX - shiftX, centerY - shiftY);
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        // Initialize
+        resize();
+        animate();
+
     </script>
 </body>
 </html>
